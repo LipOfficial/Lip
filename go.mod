@@ -10,7 +10,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli/v2 v2.27.4
 	github.com/xeipuuv/gojsonschema v1.2.0
-	golang.org/x/mod v0.20.0
+	golang.org/x/mod v0.22.0
 	golang.org/x/term v0.24.0
 )
 
