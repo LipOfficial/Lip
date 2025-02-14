@@ -1,16 +1,17 @@
 # lip
 
-[![Build](https://img.shields.io/github/actions/workflow/status/lippkg/lip/build.yml?style=for-the-badge)](https://github.com/lippkg/lip/actions)
-[![Latest Tag](https://img.shields.io/github/v/tag/lippkg/lip?label=LATEST%20TAG&style=for-the-badge)](https://github.com/lippkg/lip/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/lippkg/lip/latest/total?style=for-the-badge)](https://github.com/lippkg/lip/releases/latest)
+[![Latest Tag](https://img.shields.io/github/v/tag/futrime/lip?style=for-the-badge)](https://github.com/futrime/lip/releases/latest)
+[![GitHub License](https://img.shields.io/github/license/futrime/lip?style=for-the-badge)](https://github.com/futrime/lip/blob/main/COPYING)
+[![Downloads](https://img.shields.io/github/downloads/futrime/lip/latest/total?style=for-the-badge)](https://github.com/futrime/lip/releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/futrime/lip/build.yml?style=for-the-badge)](https://github.com/futrime/lip/actions/workflows/build.yml)
 
 A general package installer
 
-lip is a general package installer. You can use lip to install packages from any Git repository.
+**lip** is a general package installer. You can use **lip** to install packages from any Git repository.
 
 ## Security
 
-This software package manager (hereinafter referred to as "this software") is developed and provided by LiteLDev (hereinafter referred to as "the developer"). This software is designed to help users manage and install various software packages, but is not responsible for any content, quality, functionality, security or legality of any software package. Users should use this software at their own discretion and assume all related risks.
+This software package manager (hereinafter referred to as "this software") is developed and provided by Zijian Zhang (hereinafter referred to as "the developer"). This software is designed to help users manage and install various software packages, but is not responsible for any content, quality, functionality, security or legality of any software package. Users should use this software at their own discretion and assume all related risks.
 
 The developer does not guarantee the stability, reliability, accuracy or completeness of this software. The developer is not liable for any defects, errors, viruses or other harmful components that may exist in this software. The developer is not liable for any direct or indirect damages (including but not limited to data loss, device damage, profit loss etc.) caused by the use of this software.
 
@@ -22,58 +23,28 @@ If you have any questions or comments about this disclaimer, please contact the 
 
 ## Install
 
-First, download latest version of lip from <https://github.com/lippkg/lip/releases/latest>. You may select the version for your platform.
-
-Then, unzip the content to somewhere you would like to install lip.
-
-Finally, add the location to PATH environment variable.
-
-To check if lip is installed successfully, run `lip --version` in your terminal. You should see the version of lip you just installed.
-
-For more information, please refer to [the documentation](https://docs.lippkg.com).
+**lip** is a self-contained executable file, so you don't need to install it. Just download the latest version from <https://github.com/futrime/lip/releases/latest>.
 
 ## Usage
 
-To install a online tooth (a package in lip), run `lip install <tooth>`. Here is an example:
-
-```bash
-lip install github.com/LiteLDev/LeviLamina
+```shell
+lip <command>
 ```
 
-To install a local tooth (typically with `.tth` extension name), run `lip install <path>`. Here is an example:
-
-```bash
-lip install ./example.tth
-```
-
-To uninstall a tooth, run `lip uninstall <tooth>`. Here is an example:
-
-```bash
-lip uninstall github.com/LiteLDev/LeviLamina
-```
-
-To list all installed teeth, run `lip list`. Here is an example:
-
-To show information of a tooth, run `lip show <tooth>`. Here is an example:
-
-```bash
-lip show github.com/LiteLDev/LeviLamina
-```
-
-For more information, please refer to [the documentation](https://docs.lippkg.com).
+Check out [the documentation](https://futrime.github.io/lip/) for more information.
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/lippkg/lip/issues/new/choose) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/futrime/lip/issues/new/choose) or submit PRs.
 
-lip follows the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) Code of Conduct.
+**lip** follows the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) Code of Conduct.
 
 ### Contributors
 
 This project exists thanks to all the people who contribute.
 
-![Contributors](https://contrib.rocks/image?repo=lippkg/lip)
+![Contributors](https://contrib.rocks/image?repo=futrime/lip)
 
 ## License
 
-GPL-3.0-only © 2021-2024 lippkg
+GPL-3.0-only © 2023-2025 Zijian Zhang

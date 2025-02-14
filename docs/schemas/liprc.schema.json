@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "cache": {
+            "type": "string"
+        },
+        "color": {
+            "type": "boolean"
+        },
+        "github_proxy": {
+            "type": "string"
+        },
+        "go_module_proxy": {
+            "type": "string"
+        },
+        "https_proxy": {
+            "type": "string"
+        },
+        "noproxy": {
+            "type": "string"
+        },
+        "proxy": {
+            "type": "string"
+        }
+    }
+}

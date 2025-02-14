@@ -1,40 +1,39 @@
-site_name: lip
-repo_url: https://github.com/futrime/lip/
+site_name: lip Docs
+repo_url: https://github.com/futrime/lip
 
 nav:
-  - Home: index.md
-
-  - install.md
-
-  - quickstart.md
-
-  - faq.md
-
-  - Tutorials:
-    - tutorials/create_a_lip_tooth.md
-
-  - Reference:
-    - reference/lip.md
-    - reference/lip_cache.md
-    - reference/lip_cache_purge.md
-    - reference/lip_install.md
-    - reference/lip_list.md
-    - reference/lip_show.md
-    - reference/lip_tooth.md
-    - reference/lip_tooth_init.md
-    - reference/lip_tooth_pack.md
-    - reference/lip_uninstall.md
-    - reference/tooth_json_file_reference.md
-
-  - Packages: https://bedrinth.com
+  - index.md
+  - User Guide:
+    - user-guide/getting-started.md
+    - user-guide/installation.md
+    - user-guide/basic-use.md
+    - user-guide/faq.md
+    - Commands:
+      - user-guide/commands/lip.md
+      - user-guide/commands/lip-cache.md
+      - user-guide/commands/lip-config.md
+      - user-guide/commands/lip-init.md
+      - user-guide/commands/lip-install.md
+      - user-guide/commands/lip-list.md
+      - user-guide/commands/lip-pack.md
+      - user-guide/commands/lip-prune.md
+      - user-guide/commands/lip-run.md
+      - user-guide/commands/lip-uninstall.md
+      - user-guide/commands/lip-update.md
+      - user-guide/commands/lip-view.md
+    - Files:
+      - user-guide/files/tooth-json.md
+  - Get Packages: https://bedrinth.com
 
 theme:
   name: material
   features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-  favicon: images/favicon.ico
-  logo: images/logo.webp
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.sections
+  favicon: img/favicon.ico
+  logo: img/logo.webp
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -88,9 +87,8 @@ plugins:
         - locale: zh
           name: 中文
           nav_translations:
-            Home: 首页
-            Tutorials: 教程
-            Reference: 参考
-            Packages: 包
-
+            User Guide: 用户指南
+            Commands: 命令
+            Files: 文件
+            Get Packages: 获取软件包
   - search

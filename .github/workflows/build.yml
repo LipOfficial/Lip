@@ -1,63 +1,151 @@
 on:
   pull_request:
+    paths:
+      - .github/workflows/build.yml
+      - '**.cs'
+      - '**.csproj'
   push:
+    paths:
+      - .github/workflows/build.yml
+      - '**.cs'
+      - '**.csproj'
   workflow_dispatch:
 
+env:
+  DOTNET_VERSION: 9.0.x
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-lib:
     strategy:
+      fail-fast: false
       matrix:
-        GOOS:
-          - darwin
-          - linux
-          - windows
-        GOARCH:
-          - amd64
-          - arm64
+        project:
+          - Lip.CLI
+          - Lip.Context
+        include:
+          - runtime: linux-arm64
+            runs-on: ubuntu-22.04
+          - runtime: linux-x64
+            runs-on: ubuntu-latest
+          - runtime: osx-arm64
+            runs-on: macos-latest
+          - runtime: osx-x64
+            runs-on: macos-latest
+          - runtime: win-arm64
+            runs-on: windows-latest
+          - runtime: win-x64
+            runs-on: windows-latest
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-dotnet@v4
         with:
-         cache: true
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build
+      - run: >
+          dotnet build ${{ matrix.project }}
+          --configuration Release
+          --runtime ${{ matrix.runtime }}
+
+  build-app:
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - Lip.CLI
+        runtime:
+          - linux-arm64
+          - linux-x64
+          - osx-arm64
+          - osx-x64
+          - win-arm64
+          - win-x64
+        include:
+          - runtime: linux-arm64
+            runs-on: ubuntu-22.04
+          - runtime: linux-x64
+            runs-on: ubuntu-latest
+          - runtime: osx-arm64
+            runs-on: macos-latest
+          - runtime: osx-x64
+            runs-on: macos-latest
+          - runtime: win-arm64
+            runs-on: windows-latest
+          - runtime: win-x64
+            runs-on: windows-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - if: matrix.runtime == 'linux-arm64'
         run: |
-          export GOOS=${{ matrix.GOOS }}
-          export GOARCH=${{ matrix.GOARCH }}
-          go build -ldflags "-s -w" -o bin/ github.com/lippkg/lip/cmd/lip
+          sudo dpkg --add-architecture arm64
+          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+          EOF'
+          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+          sudo apt update
+          sudo apt install -y clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64
+
+      - run: >
+          dotnet publish ${{ matrix.project }}
+          --configuration Release
+          --output bin
+          --runtime ${{ matrix.runtime }}
+          -p:OptimizationPreference=Size
+          -p:PublishAot=true
 
       - uses: actions/upload-artifact@v4
         with:
-          name: lip-${{ matrix.GOOS }}-${{ matrix.GOARCH }}-${{ github.sha }}
-          path: bin
+          name: ${{ github.event.repository.name }}-${{ matrix.project }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/
 
-  build-docs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - Lip.Tests
+        runs-on:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - run: |
+          dotnet test ${{ matrix.project }}
+
+  check-style:
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - Lip
+          - Lip.Tests
+          - Lip.CLI
+          - Lip.Context
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install MkDocs and MkDocs static i18n plugin
-        run: |
-          pip install -r requirements.txt
-      - name: Build
-        run: |
-          mkdocs build
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/setup-dotnet@v4
         with:
-          path: site/
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: build-docs
-    permissions:
-      id-token: write
-      pages: write
-    runs-on: ubuntu-latest
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - run: >
+          dotnet format ${{ matrix.project }}
+          --verify-no-changes

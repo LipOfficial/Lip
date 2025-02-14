@@ -1,0 +1,41 @@
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build-docs.yml
+      - docs/**
+  push:
+    paths:
+      - .github/workflows/build-docs.yml
+      - docs/**
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          pip install -r requirements.txt
+        working-directory: docs
+
+      - run: |
+          mkdocs build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build-docs
+    permissions:
+      id-token: write
+      pages: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
